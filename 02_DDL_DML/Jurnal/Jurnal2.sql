@@ -1,0 +1,107 @@
+CREATE TABLE FILM (
+    id_film NUMBER PRIMARY KEY,
+    judul VARCHAR2(100),
+    sinopsis VARCHAR2(250),
+    tahun NUMBER,
+    durasi NUMBER
+);
+
+CREATE TABLE THEATER (
+    id_theater NUMBER PRIMARY KEY,
+    harga NUMBER,
+    kapasitas NUMBER,
+    kelas VARCHAR2(50)
+);
+
+CREATE TABLE MEMBER (
+    id_member INT PRIMARY KEY,
+    nama VARCHAR2(100),
+    no_hp VARCHAR2(15),
+    tgl_lahir DATE,
+    email VARCHAR2(100)
+);
+
+CREATE TABLE JADWAL (
+    id_jadwal NUMBER PRIMARY KEY,
+    id_film NUMBER,
+    id_theater NUMBER,
+    periode_start DATE,
+    periode_end DATE,
+    FOREIGN KEY (id_film) REFERENCES FILM(id_film),
+    FOREIGN KEY (id_theater) REFERENCES THEATER(id_theater)
+);
+
+CREATE TABLE TRANSAKSI (
+    kode_pemesanan NUMBER PRIMARY KEY,
+    id_jadwal NUMBER,
+    id_member NUMBER,
+    status VARCHAR2(20),
+    tanggal DATE,
+    total_harga NUMBER,
+    FOREIGN KEY (id_jadwal) REFERENCES JADWAL(id_jadwal),
+    FOREIGN KEY (id_member) REFERENCES MEMBER(id_member)
+);
+
+CREATE TABLE INVENTARIS (
+    id_inventaris NUMBER PRIMARY KEY,
+    id_theater NUMBER,
+    nomor_kursi NUMBER,
+    FOREIGN KEY (id_theater) REFERENCES THEATER(id_theater)
+);
+
+SELECT table_name FROM user_tables;
+
+INSERT INTO FILM VALUES (1, 'The Call', 'Film Horror Thriller Korea', 2020, 180);
+INSERT INTO FILM VALUES (2, 'The Witch: Part 1', 'Film Action Mystery', 2018, 180);
+INSERT INTO FILM VALUES (3, 'Parasite', 'Film Drama Thriller Korea', 2019, 132);
+
+INSERT INTO THEATER VALUES (1, 50000, 120, 'Regular');
+INSERT INTO THEATER VALUES (2, 100000, 80, 'VIP');
+INSERT INTO THEATER VALUES (3, 150000, 50, 'VVIP');
+
+INSERT INTO MEMBER VALUES (1, 'Najwa', '08123456789',
+    TO_DATE('2006-01-01','YYYY-MM-DD'), 'najwa@email.com');
+INSERT INTO MEMBER VALUES (2, 'Nadia', '08987654321',
+    TO_DATE('2004-05-15','YYYY-MM-DD'), 'nadia@email.com');
+INSERT INTO MEMBER VALUES (3, 'Sukma', '08111222333',
+    TO_DATE('2005-08-20','YYYY-MM-DD'), 'sukma@email.com');
+
+INSERT INTO JADWAL VALUES (1, 1, 1,
+    TO_DATE('2026-03-10','YYYY-MM-DD'),
+    TO_DATE('2026-03-20','YYYY-MM-DD'));
+INSERT INTO JADWAL VALUES (2, 2, 2,
+    TO_DATE('2026-03-11','YYYY-MM-DD'),
+    TO_DATE('2026-03-21','YYYY-MM-DD'));
+INSERT INTO JADWAL VALUES (3, 3, 3,
+    TO_DATE('2026-03-12','YYYY-MM-DD'),
+    TO_DATE('2026-03-22','YYYY-MM-DD'));
+
+INSERT INTO TRANSAKSI VALUES (1, 1, 1, 'Lunas',
+    TO_DATE('2026-03-10','YYYY-MM-DD'), 50000);
+INSERT INTO TRANSAKSI VALUES (2, 2, 2, 'Lunas',
+    TO_DATE('2026-03-11','YYYY-MM-DD'), 100000);
+INSERT INTO TRANSAKSI VALUES (3, 3, 3, 'Lunas',
+    TO_DATE('2026-03-12','YYYY-MM-DD'), 150000);
+
+INSERT INTO INVENTARIS VALUES (1, 1, 101);
+INSERT INTO INVENTARIS VALUES (2, 1, 102);
+INSERT INTO INVENTARIS VALUES (3, 2, 201);
+
+
+SELECT * FROM FILM;
+SELECT * FROM MEMBER;
+SELECT * FROM JADWAL;
+SELECT * FROM THEATER;
+SELECT * FROM TRANSAKSI;
+SELECT * FROM INVENTARIS;
+
+UPDATE FILM SET judul = 'The Call (2020)' WHERE id_film = 1;
+UPDATE THEATER SET harga = 75000 WHERE id_theater = 1;
+UPDATE MEMBER SET no_hp = '08199999999' WHERE id_member = 1;
+UPDATE TRANSAKSI SET status = 'Lunas' WHERE kode_pemesanan = 3;
+UPDATE TRANSAKSI SET total_harga = 200000 WHERE kode_pemesanan = 2;
+
+DELETE FROM TRANSAKSI WHERE kode_pemesanan = 3;
+DELETE FROM MEMBER WHERE id_member = 3;
+DELETE FROM INVENTARIS WHERE id_inventaris = 3;
+
